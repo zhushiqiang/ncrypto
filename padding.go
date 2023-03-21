@@ -59,11 +59,11 @@ type PKCS5Padding struct {
 }
 
 func (p PKCS5Padding) Pad(src []byte, blockSize int) ([]byte, error) {
-	return p.padding.Pad(src, 8)
+	return p.padding.Pad(src, blockSize)
 }
 
 func (p PKCS5Padding) UnPad(src []byte, blockSize int) ([]byte, error) {
-	return p.padding.UnPad(src, 8)
+	return p.padding.UnPad(src, blockSize)
 }
 
 func NewPKCS7Padding() Padding {
