@@ -222,62 +222,61 @@ func RSAVerifyWithKey(ciphertext, sign []byte, key *rsa.PublicKey, hash crypto.H
 }
 
 func getPublicKeyBytes(publicKey *rsa.PublicKey) ([]byte, error) {
-	pubDer, err := x509.MarshalPKIXPublicKey(publicKey)
+	publicBytes, err := x509.MarshalPKIXPublicKey(publicKey)
 	if err != nil {
 		return nil, err
 	}
 
-	pubBlock := &pem.Block{Type: kPublicKeyType, Bytes: pubDer}
+	publicBlock := &pem.Block{Type: kPublicKeyType, Bytes: publicBytes}
 
-	var pubBuf bytes.Buffer
-	if err = pem.Encode(&pubBuf, pubBlock); err != nil {
+	var publicBuffer bytes.Buffer
+	if err = pem.Encode(&publicBuffer, publicBlock); err != nil {
 		return nil, err
 	}
-	return pubBuf.Bytes(), nil
+	return publicBuffer.Bytes(), nil
 }
 
-func GenRSAKeyWithPKCS1(bits int) (privateKey, publicKey []byte, err error) {
-	priKey, err := rsa.GenerateKey(rand.Reader, bits)
+func GenPKCS1KeyPair(bits int) (privateKey, publicKey []byte, err error) {
+	private, err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
 		return nil, nil, err
 	}
-	priDer := x509.MarshalPKCS1PrivateKey(priKey)
-	priBlock := &pem.Block{Type: kRSAPrivateKeyType, Bytes: priDer}
+	privateBytes := x509.MarshalPKCS1PrivateKey(private)
+	privateBlock := &pem.Block{Type: kRSAPrivateKeyType, Bytes: privateBytes}
 
-	var priBuf bytes.Buffer
-	if err = pem.Encode(&priBuf, priBlock); err != nil {
+	var privateBuffer bytes.Buffer
+	if err = pem.Encode(&privateBuffer, privateBlock); err != nil {
 		return nil, nil, err
 	}
 
-	publicKey, err = getPublicKeyBytes(&priKey.PublicKey)
+	publicKey, err = getPublicKeyBytes(&private.PublicKey)
 	if err != nil {
 		return nil, nil, err
 	}
-	privateKey = priBuf.Bytes()
+	privateKey = privateBuffer.Bytes()
 	return privateKey, publicKey, err
 }
 
-func GenRSAKeyWithPKCS8(bits int) (privateKey, publicKey []byte, err error) {
-	priKey, err := rsa.GenerateKey(rand.Reader, bits)
+func GenPKCS8KeyPair(bits int) (privateKey, publicKey []byte, err error) {
+	private, err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
 		return nil, nil, err
 	}
-	priDer, err := x509.MarshalPKCS8PrivateKey(priKey)
+	privateBytes, err := x509.MarshalPKCS8PrivateKey(private)
 	if err != nil {
 		return nil, nil, err
 	}
-	priBlock := &pem.Block{Type: kPrivateKeyType, Bytes: priDer}
+	privateBlock := &pem.Block{Type: kPrivateKeyType, Bytes: privateBytes}
 
-	var priBuf bytes.Buffer
-	if err = pem.Encode(&priBuf, priBlock); err != nil {
+	var privateBuffer bytes.Buffer
+	if err = pem.Encode(&privateBuffer, privateBlock); err != nil {
 		return nil, nil, err
 	}
 
-	publicKey, err = getPublicKeyBytes(&priKey.PublicKey)
+	publicKey, err = getPublicKeyBytes(&private.PublicKey)
 	if err != nil {
 		return nil, nil, err
 	}
-	privateKey = priBuf.Bytes()
-
+	privateKey = privateBuffer.Bytes()
 	return privateKey, publicKey, err
 }

@@ -37,3 +37,21 @@ pFwKUHMh+rm4/Asgy126+rS6Hr0QuNuoJuQbAr3Q28h7PQ==
 	var p, _ = ncrypto.RSADecryptWithPKCS1(c, pri)
 	fmt.Println(string(p))
 }
+
+func TestGenPKCS1KeyPair(t *testing.T) {
+	var private, public, err = ncrypto.GenPKCS1KeyPair(1024)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(string(private))
+	t.Log(string(public))
+}
+
+func TestGenPKCS8KeyPair(t *testing.T) {
+	var private, public, err = ncrypto.GenPKCS8KeyPair(1024)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(string(private))
+	t.Log(string(public))
+}
