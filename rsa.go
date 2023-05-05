@@ -206,19 +206,19 @@ func RSASignWithKey(plaintext []byte, key *rsa.PrivateKey, hash crypto.Hash) ([]
 	return rsa.SignPKCS1v15(rand.Reader, key, hash, hashed)
 }
 
-func RSAVerify(ciphertext, sign, key []byte, hash crypto.Hash) error {
+func RSAVerify(ciphertext, signature, key []byte, hash crypto.Hash) error {
 	pubKey, err := ParsePublicKey(key)
 	if err != nil {
 		return err
 	}
-	return RSAVerifyWithKey(ciphertext, sign, pubKey, hash)
+	return RSAVerifyWithKey(ciphertext, signature, pubKey, hash)
 }
 
-func RSAVerifyWithKey(ciphertext, sign []byte, key *rsa.PublicKey, hash crypto.Hash) error {
+func RSAVerifyWithKey(ciphertext, signature []byte, key *rsa.PublicKey, hash crypto.Hash) error {
 	var h = hash.New()
 	h.Write(ciphertext)
 	var hashed = h.Sum(nil)
-	return rsa.VerifyPKCS1v15(key, hash, hashed, sign)
+	return rsa.VerifyPKCS1v15(key, hash, hashed, signature)
 }
 
 func getPublicKeyBytes(publicKey *rsa.PublicKey) ([]byte, error) {
