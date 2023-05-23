@@ -7,7 +7,7 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
-	"github.com/smartwalle/ncrypto/pbkdf2"
+	"golang.org/x/crypto/pbkdf2"
 	"hash"
 	"io"
 )
